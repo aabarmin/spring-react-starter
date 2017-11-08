@@ -1,2 +1,4 @@
 .gradle
 frontend/node_modules
+.idea
+*.iml
