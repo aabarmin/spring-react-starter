@@ -1,27 +1,24 @@
 import React, { Component } from 'react';
-import {
-    BrowserRouter as Router,
-    Route
-} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
 import Grid from 'react-bootstrap/lib/Grid';
 
 import Header from './app/Header';
-
-import Dashboard from './dashboard/Dashboard';
-import UsersComponent from './users/UsersComponent';
+import Routes from './app/router/Routes';
+import store from './app/store/store';
 
 class App extends Component {
     render() {
         return (
-            <Router>
-                <Grid>
-                    <Header/>
-
-                    <Route exact path="/" component={Dashboard} />
-                    <Route path="/users" component={UsersComponent} />
-                </Grid>
-            </Router>
+            <Provider store={store}>
+                <Router>
+                    <Grid>
+                        <Header/>
+                        <Routes/>
+                    </Grid>
+                </Router>
+            </Provider>
         );
     }
 }
