@@ -7,6 +7,12 @@ node {
   download = true
 }
 
+task installDependencies(type: NpmTask) {
+	args = ['install']
+}
+
 task start(type: YarnTask) {
     args = ['start']
 }
+
+start.dependsOn(installDependencies);
