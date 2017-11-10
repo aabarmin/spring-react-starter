@@ -5,7 +5,7 @@ import Dashboard from '../../dashboard/Dashboard';
 import UsersComponent from '../../users/UsersComponent';
 
 import privateRoute from './privateRoute';
-import LoginPage from "../login/LoginPage";
+import LoginPage from '../ui/login/LoginPage';
 
 class Routes extends Component {
     render() {

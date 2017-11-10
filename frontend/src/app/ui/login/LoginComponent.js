@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 import {
     Button,
-    Col, Form, FormControl, FormGroup, Modal } from "react-bootstrap";
+    Col, Form, FormControl, FormGroup, Modal,
+    ProgressBar
+    } from "react-bootstrap";
 
 class LoginComponent extends Component {
     state = {
@@ -21,6 +23,13 @@ class LoginComponent extends Component {
     }
 
     render() {
+    	let actionComponent;
+    	if (this.props.inProgress) {
+    		actionComponent = <ProgressBar active now={100} />
+    	} else {
+    		actionComponent = <Button bsStyle="primary" onClick={this.handleSubmit.bind(this)}>Login</Button>
+    	}
+    	
         return (
             <Modal.Dialog>
                 <Modal.Header>
@@ -56,7 +65,7 @@ class LoginComponent extends Component {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button bsStyle="primary" onClick={this.handleSubmit.bind(this)}>Login</Button>
+                	{actionComponent}
                 </Modal.Footer>
             </Modal.Dialog>
         )
