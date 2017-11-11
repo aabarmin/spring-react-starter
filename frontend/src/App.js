@@ -15,13 +15,12 @@ import { authenticate } from "./app/store/reducers/app/auth";
 const p = (store) => ({
     visible: store.authentication.isDialogVisible,
     inProgress: store.authentication.inProgress,
-    loginMessage: store.authentication.loginException,
-    target: store.authentication.basicAuthenticationUrl
+    loginMessage: store.authentication.loginException
 });
 
 const a = (dispatch) => ({
-    login: (username, password, target) => {
-        dispatch(authenticate(username, password, target));
+    login: (username, password) => {
+        dispatch(authenticate(username, password));
     }
 });
 

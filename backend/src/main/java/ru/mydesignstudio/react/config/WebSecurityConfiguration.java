@@ -16,28 +16,16 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    private RestAuthenticationEntryPoint authenticationEntryPoint;
-    @Autowired
-    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private RestAuthenticationHandler authenticationHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .csrf().disable()
-                .authorizeRequests()
-                    .anyRequest().authenticated().and()
-                // basic auth is necessary to get 401 response headers on protected resources
-                // .httpBasic().authenticationEntryPoint(authenticationEntryPoint).and()
-                // this auth is necessary for authentication
-                /*
-                .formLogin()
-                    .loginPage("/login")
-                    .successHandler(authenticationSuccessHandler)
-                    .permitAll();
-                    */
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
-                .formLogin().successHandler(authenticationSuccessHandler).and()
-                .formLogin().failureHandler(authenticationSuccessHandler);
+                .authorizeRequests().anyRequest().authenticated().and()
+                .exceptionHandling().authenticationEntryPoint(authenticationHandler).and()
+                .formLogin().successHandler(authenticationHandler).and()
+                .formLogin().failureHandler(authenticationHandler);
     }
 
     @Bean
@@ -46,11 +34,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD",
                 "GET", "POST", "PUT", "DELETE", "PATCH"));
-        // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
         configuration.setAllowCredentials(true);
-        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-        // will fail with 403 Invalid CORS request
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setExposedHeaders(Arrays.asList(
                 "login_token",
