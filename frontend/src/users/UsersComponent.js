@@ -5,6 +5,19 @@ import Col from 'react-bootstrap/lib/Col';
 
 import Sidebar from './Sidebar';
 import Content from './Content';
+import {connect} from "react-redux";
+
+import { loadUsers } from '../app/store/reducers/users/users';
+
+const sidebarProps = (store) => ({
+    users: store.users.users
+});
+
+const sidebarActions = (dispatch) => ({
+    load: () => { dispatch(loadUsers()) }
+});
+
+const WrappedContent = connect(sidebarProps, sidebarActions)(Content);
 
 class UsersComponent extends Component {
     render() {
@@ -14,7 +27,7 @@ class UsersComponent extends Component {
                     <Sidebar/>
                 </Col>
                 <Col sm={9}>
-                    <Content/>
+                    <WrappedContent/>
                 </Col>
             </Row>
         )

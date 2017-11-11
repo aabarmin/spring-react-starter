@@ -1,50 +1,56 @@
-const ACTION_LOGIN = "login";
-const ACTION_AUTH_STARTED = "auth_started";
-const ACTION_AUTH_FINISHED = "auth_finished";
+export const AUTH_LOGIN_SHOW = "auth_login";
+export const AUTH_TOKEN = "auth_token";
 
 const defaultState = {
-    isAuthenticated: false,
-    inProgress: false
+    inProgress: false,
+    isDialogVisible: false,
+    basicAuthenticationUrl: ""
 };
 
-export function login(login, password) {
-    return (dispatch) => {
-    	dispatch(authStarted());
-    	setTimeout(() => {
-    		dispatch(authFinished())
-    	}, 2000)
+const AUTH_REQUEST_SEND = "auth_request_semd";
+const AUTH_REQUEST_OK = "auth_request_ok";
+const AUTH_REQUEST_ERROR = "auth_request_error";
+
+export function authenticate(username, password, target) {
+    return {
+        types: [ AUTH_REQUEST_SEND, AUTH_REQUEST_OK, AUTH_REQUEST_ERROR ],
+        promise: (client) => {
+            return client.get(target, {
+                withCredentials: true,
+                auth: {
+                    username: username,
+                    password: password
+                }
+            })
+        }
     }
-}
-
-function authStarted() {
-	return {
-		type: ACTION_AUTH_STARTED
-	}
-}
-
-function authFinished() {
-	return {
-		type: ACTION_AUTH_FINISHED
-	}
 }
 
 const auth = (state = defaultState, action) => {
     switch (action.type) {
-    	case ACTION_AUTH_STARTED: 
-    		return {
-    			...state,
-    			inProgress: true
-    		};
-    		
-    	case ACTION_AUTH_FINISHED:
-    		return {
-    			...state,
-    			inProgress: false
-    		};
+        case AUTH_LOGIN_SHOW:
+            localStorage.removeItem(AUTH_TOKEN);
+			return {
+                ...state,
+                basicAuthenticationUrl: action.target,
+                isDialogVisible: true
+            };
+
+        case AUTH_REQUEST_OK:
+            localStorage.setItem(AUTH_TOKEN, action.data.config.headers.Authorization);
+            return {
+                ...state,
+                basicAuthenticationUrl: "",
+                isDialogVisible: false
+            };
+
+        case AUTH_REQUEST_ERROR:
+            debugger;
+            break;
     
     	default:
             return state;
     }
-}
+};
 
 export default auth;

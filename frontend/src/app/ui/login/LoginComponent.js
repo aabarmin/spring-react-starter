@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 
 import {
     Button,
-    Col, Form, FormControl, FormGroup, Modal,
+    Col,
+    Form,
+    FormControl,
+    FormGroup,
+    Modal,
     ProgressBar
-    } from "react-bootstrap";
+} from "react-bootstrap";
 
 class LoginComponent extends Component {
     state = {
@@ -19,15 +23,20 @@ class LoginComponent extends Component {
     }
 
     handleSubmit = (e) => {
-        this.props.login(this.state.username, this.state.password);
+        e.preventDefault();
+        this.props.login(this.state.username, this.state.password, this.props.target);
     }
 
     render() {
+        if (!this.props.visible) {
+            return <div></div>
+        }
+
     	let actionComponent;
     	if (this.props.inProgress) {
     		actionComponent = <ProgressBar active now={100} />
     	} else {
-    		actionComponent = <Button bsStyle="primary" onClick={this.handleSubmit.bind(this)}>Login</Button>
+    		actionComponent = <Button bsStyle="primary" type="submit">Login</Button>
     	}
     	
         return (
@@ -38,6 +47,7 @@ class LoginComponent extends Component {
                     </Modal.Title>
                 </Modal.Header>
 
+                <form onSubmit={this.handleSubmit.bind(this)}>
                 <Modal.Body>
                     <Form horizontal>
                         <FormGroup>
@@ -67,6 +77,7 @@ class LoginComponent extends Component {
                 <Modal.Footer>
                 	{actionComponent}
                 </Modal.Footer>
+                </form>
             </Modal.Dialog>
         )
     }
