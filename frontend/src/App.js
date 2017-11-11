@@ -15,6 +15,7 @@ import { authenticate } from "./app/store/reducers/app/auth";
 const p = (store) => ({
     visible: store.authentication.isDialogVisible,
     inProgress: store.authentication.inProgress,
+    loginMessage: store.authentication.loginException,
     target: store.authentication.basicAuthenticationUrl
 });
 

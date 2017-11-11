@@ -16,7 +16,9 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    private CustomBasicAuthenticationEntryPoint authenticationEntryPoint;
+    private RestAuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -24,7 +26,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                     .anyRequest().authenticated().and()
-                .httpBasic().authenticationEntryPoint(authenticationEntryPoint);
+                // basic auth is necessary to get 401 response headers on protected resources
+                // .httpBasic().authenticationEntryPoint(authenticationEntryPoint).and()
+                // this auth is necessary for authentication
+                /*
+                .formLogin()
+                    .loginPage("/login")
+                    .successHandler(authenticationSuccessHandler)
+                    .permitAll();
+                    */
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
+                .formLogin().successHandler(authenticationSuccessHandler).and()
+                .formLogin().failureHandler(authenticationSuccessHandler);
     }
 
     @Bean
@@ -39,6 +52,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         // setAllowedHeaders is important! Without it, OPTIONS preflight request
         // will fail with 403 Invalid CORS request
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList(
+                "login_token",
+                "login_status"
+        ));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

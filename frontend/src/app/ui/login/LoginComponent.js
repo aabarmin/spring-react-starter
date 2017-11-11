@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import {
+    Alert,
     Button,
     Col,
     Form,
@@ -38,6 +39,17 @@ class LoginComponent extends Component {
     	} else {
     		actionComponent = <Button bsStyle="primary" type="submit">Login</Button>
     	}
+
+    	let loginMessage;
+    	if (this.props.loginMessage.length > 0) {
+    	    loginMessage = (
+    	        <Alert bsStyle="danger">
+                    {this.props.loginMessage}
+                </Alert>
+            )
+        } else {
+    	    loginMessage = <div></div>
+        }
     	
         return (
             <Modal.Dialog>
@@ -50,6 +62,8 @@ class LoginComponent extends Component {
                 <form onSubmit={this.handleSubmit.bind(this)}>
                 <Modal.Body>
                     <Form horizontal>
+                        {loginMessage}
+
                         <FormGroup>
                             <Col sm={3}>
                                 Login:

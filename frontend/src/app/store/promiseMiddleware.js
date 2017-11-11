@@ -16,7 +16,7 @@ axios.interceptors.response.use(data => {
 });
 axios.interceptors.request.use(config => {
     if (!!localStorage.getItem(AUTH_TOKEN)) {
-        config.headers.common['Authorization'] = localStorage.getItem(AUTH_TOKEN);
+        config.withCredentials = true;
     }
     return config;
 })
