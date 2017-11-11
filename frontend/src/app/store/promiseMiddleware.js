@@ -19,7 +19,7 @@ axios.interceptors.request.use(config => {
         config.withCredentials = true;
     }
     return config;
-})
+});
 
 export default function promiseMiddleware({ dispatch, getState }) {
     return next => action => {
@@ -32,9 +32,6 @@ export default function promiseMiddleware({ dispatch, getState }) {
             return next(action);
         }
         // with a promise
-        // const state = getState();
-        axios._store = getState();
-
         // extracting properties as local variables
         const { promise, types, afterSuccess, ...rest} = action;
         const [ REQUEST, SUCCESS, FAILURE ] = types;
@@ -45,7 +42,8 @@ export default function promiseMiddleware({ dispatch, getState }) {
             if (data.response && data.response.status && data.response.status === 401) {
                 next({
                     type: AUTH_LOGIN_SHOW,
-                    target: data.config.url
+                    target: data.config.url,
+                    lastAction: action
                 });
                 return;
             }

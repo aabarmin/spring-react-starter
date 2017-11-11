@@ -4,7 +4,8 @@ export const AUTH_TOKEN = "auth_token";
 const defaultState = {
     inProgress: false,
     isDialogVisible: false,
-    loginException: ""
+    loginException: "",
+    lastAction: null
 };
 
 const AUTH_REQUEST_SEND = "auth_request_send";
@@ -19,6 +20,14 @@ export function authenticate(username, password) {
             params.append('username', username);
             params.append('password', password);
             return client.post("/login", params);
+        },
+        afterSuccess: (dispatch, getState, response) => {
+            // dispatching last action
+            const state = getState();
+            const lastAction = state.authentication.lastAction;
+            if (lastAction) {
+                dispatch(lastAction);
+            }
         }
     }
 }
@@ -30,14 +39,15 @@ const auth = (state = defaultState, action) => {
 			return {
                 ...state,
                 loginException: "",
-                isDialogVisible: true
+                isDialogVisible: true,
+                lastAction: action.lastAction
             };
 
         case AUTH_REQUEST_SEND:
             return {
                 ...state,
                 inProgress: true
-            }
+            };
 
         case AUTH_REQUEST_OK:
             localStorage.setItem(AUTH_TOKEN, AUTH_TOKEN);
