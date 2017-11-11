@@ -29,17 +29,18 @@ class LoginComponent extends Component {
     }
 
     render() {
+        // hide component if it's not visible
         if (!this.props.visible) {
-            return <div></div>
+            return null;
         }
-
+        // show progress instead of button on login
     	let actionComponent;
     	if (this.props.inProgress) {
     		actionComponent = <ProgressBar active now={100} />
     	} else {
     		actionComponent = <Button bsStyle="primary" type="submit">Login</Button>
     	}
-
+        // show alert message if necessary
     	let loginMessage;
     	if (this.props.loginMessage.length > 0) {
     	    loginMessage = (
@@ -48,7 +49,7 @@ class LoginComponent extends Component {
                 </Alert>
             )
         } else {
-    	    loginMessage = <div></div>
+    	    loginMessage = null;
         }
     	
         return (
