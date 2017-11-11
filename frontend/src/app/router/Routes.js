@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
 import Dashboard from '../../dashboard/Dashboard';
-import UsersComponent from '../../users/UsersComponent';
+
+import UsersPage from "../ui/users/UsersPage";
 
 class Routes extends Component {
     render() {
         return (
             <div>
                 <Route exact path="/" component={Dashboard} />
-                <Route path="/users" component={UsersComponent} />
+                <Route path="/users/" component={UsersPage} />
             </div>
         )
     }

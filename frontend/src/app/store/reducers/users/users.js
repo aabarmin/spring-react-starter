@@ -1,11 +1,16 @@
 const initialState = {
+    activeSection: 1,
+
+
     users: [],
-    isLoading: false,
+    isLoading: false
 };
 
 const ACTION_USERS_LOAD = "load_users";
 const ACTION_USERS_LOADED = "loaded_users";
 const ACTION_USERS_LOAD_FAILED = "load_failed";
+
+
 
 export function loadUsers() {
     return {
@@ -16,8 +21,24 @@ export function loadUsers() {
     }
 }
 
+const SECTION_SELECT = "users_section_select";
+
+export function sectionSelect(sectionKey) {
+    return {
+        type: SECTION_SELECT,
+        section: sectionKey
+    }
+};
+
 const users = (state = initialState, action) => {
     switch (action.type) {
+        // --- sidebar sections
+        case SECTION_SELECT:
+            return {
+                ...state,
+                activeSection: action.section
+            };
+
         case ACTION_USERS_LOAD:
             return {
                 ...state,
@@ -33,6 +54,6 @@ const users = (state = initialState, action) => {
         default:
             return state;
     }
-}
+};
 
 export default users;

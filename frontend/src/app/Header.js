@@ -22,7 +22,7 @@ class Header extends Component {
                         <Link to="/">Home</Link>
                     </NavItem>
                     <NavItem>
-                        <Link to="/users">Users</Link>
+                        <Link to="/users/">Users</Link>
                     </NavItem>
                 </Nav>
             </Navbar>
