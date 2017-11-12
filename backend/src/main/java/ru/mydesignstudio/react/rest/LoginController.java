@@ -1,4 +1,4 @@
-package ru.mydesignstudio.react.login;
+package ru.mydesignstudio.react.rest;
 
 import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import org.springframework.http.HttpStatus;

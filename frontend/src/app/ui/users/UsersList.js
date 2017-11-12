@@ -7,7 +7,7 @@ import UserEditRow from "./UserEditRow";
 
 class UsersList extends Component {
     componentWillMount() {
-        // load inital users list
+        // load initial users list
         this.props.usersLoad();
     }
 
@@ -20,28 +20,37 @@ class UsersList extends Component {
         this.props.users.forEach(user => {
             if (user.isEditable) {
                 tableRows.push(
-                    <UserEditRow user={user} key={user.id} userSave={this.props.userSave} />
+                    <UserEditRow user={user}
+                                 key={user.id}
+                                 userSwitchToRead={this.props.userSwitchToRead}
+                                 userSave={this.props.userSave} />
                 )
             } else {
-                tableRows.push(<UserViewRow user={user} userSwitchToEdit={this.props.userSwitchToEdit} key={user.id}/>);
+                tableRows.push(<UserViewRow user={user}
+                                            userSwitchToEdit={this.props.userSwitchToEdit}
+                                            key={user.id}/>);
             }
         });
 
         return (
             <content>
                 <Row>
-                    <Col sm={12}>
-                        <UsersListToolbar/>
+                    <Col sm={6}>
+                        <UsersListToolbar isLoading={this.props.isLoading}
+                                          userCreate={this.props.userCreate}/>
+                    </Col>
+                    <Col sm={3}>
+                        {loadProgress}
+                    </Col>
+                    <Col sm={3}>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={12}>
-                        {loadProgress}
-
                         <Table striped bordered>
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th style={{width: 50 + 'px'}}>#</th>
                                     <th>Login</th>
                                 </tr>
                             </thead>
@@ -64,7 +73,9 @@ UsersList.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     usersLoad: PropTypes.func.isRequired,
     userSwitchToEdit: PropTypes.func.isRequired,
-    userSave: PropTypes.func.isRequired
+    userSwitchToRead: PropTypes.func.isRequired,
+    userSave: PropTypes.func.isRequired,
+    userCreate: PropTypes.func.isRequired
 };
 
 export default UsersList;

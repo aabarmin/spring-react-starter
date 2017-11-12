@@ -27,7 +27,7 @@ export function userSwitchToEdit(id) {
 
 const USER_SWITCH_TO_READ = "user_switch_to_read";
 
-function userSwitchToRead(id) {
+export function userSwitchToRead(id) {
     return {
         type: USER_SWITCH_TO_READ,
         id: id
@@ -40,11 +40,22 @@ const USER_SAVE_ERROR = "user_save_error";
 
 export function userSave(data) {
     return {
-        types: [ USER_SAVE, USER_SAVED, USER_SAVE_ERROR],
+        types: [ USER_SAVE, USER_SAVED, USER_SAVE_ERROR ],
         promise: (client) => client.post('/users/', data),
         afterSuccess: dispatch => {
             dispatch(userSwitchToRead(data.id))
         }
+    }
+}
+
+const USER_CREATE = "user_create";
+const USER_CREATED = "user_created";
+const USER_CREATE_ERROR = "user_create_error";
+
+export function userCreate() {
+    return {
+        types: [ USER_CREATE, USER_CREATED, USER_CREATE_ERROR ],
+        promise: (client) => client.get('/users/new/')
     }
 }
 
@@ -86,6 +97,22 @@ const users = (state = initialState, action) => {
                     }
                     return user;
                 })
+            };
+
+        // --- create user
+        case USER_CREATE:
+            return {
+                ...state,
+                isLoading: true
+            };
+
+        case USER_CREATED:
+            const newUser = action.data.data;
+            newUser.isEditable = true;
+            return {
+                ...state,
+                isLoading: false,
+                users: [newUser].concat(state.users)
             };
 
         // --- switch user to edit and back again

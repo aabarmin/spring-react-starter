@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Col, Row} from "react-bootstrap";
 import {connect} from "react-redux";
-import {userSave, usersLoad, userSwitchToEdit} from "../../store/reducers/users/users";
+import {userCreate, userSave, usersLoad, userSwitchToEdit, userSwitchToRead} from "../../store/reducers/users/users";
 import UsersList from "./UsersList";
 
 const listProps = state => ({
@@ -16,8 +16,14 @@ const listActions = dispatch => ({
     userSwitchToEdit: (id) => {
         dispatch(userSwitchToEdit(id));
     },
+    userSwitchToRead: (id) => {
+        dispatch(userSwitchToRead(id));
+    },
     userSave: (data) => {
         dispatch(userSave(data));
+    },
+    userCreate: () => {
+        dispatch(userCreate());
     }
 });
 

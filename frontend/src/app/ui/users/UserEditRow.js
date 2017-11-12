@@ -24,6 +24,10 @@ class UserEditRow extends Component {
         this.props.userSave(this.state);
     }
 
+    handleCancelEdit() {
+        this.props.userSwitchToRead(this.state.id);
+    }
+
     render() {
         return [
             <tr key="top">
@@ -56,6 +60,11 @@ class UserEditRow extends Component {
                                         onClick={(e) => this.handleFormSubmit()}>
                                     Save
                                 </Button>
+
+                                <Button bsStyle="default"
+                                        onClick={e => this.handleCancelEdit()}>
+                                    Cancel
+                                </Button>
                             </Col>
                         </FormGroup>
                     </Form>
@@ -70,7 +79,8 @@ UserEditRow.propTypes = {
         id: PropTypes.number.isRequired,
         login: PropTypes.string.isRequired
     }).isRequired,
-    userSave: PropTypes.func.isRequired
+    userSave: PropTypes.func.isRequired,
+    userSwitchToRead: PropTypes.func.isRequired
 };
 
 export default UserEditRow;
