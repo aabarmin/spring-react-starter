@@ -18,11 +18,11 @@ class Header extends Component {
                     </NavbarBrand>
                 </NavbarHeader>
                 <Nav>
-                    <NavItem>
-                        <Link to="/">Home</Link>
+                    <NavItem componentClass={Link} to="/" href="/">
+                        Home
                     </NavItem>
-                    <NavItem>
-                        <Link to="/users/">Users</Link>
+                    <NavItem componentClass={Link} to="/users/" href="/users/">
+                        Users
                     </NavItem>
                 </Nav>
             </Navbar>

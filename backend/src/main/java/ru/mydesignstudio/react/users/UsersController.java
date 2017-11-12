@@ -1,5 +1,6 @@
 package ru.mydesignstudio.react.users;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,21 +19,37 @@ public class UsersController {
         );
     }
 
-    public static class User {
-        private final int id;
-        private final String name;
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public User save(@RequestBody User user) {
+        return user;
+    }
 
-        public User(int id, String name) {
+    public static class User {
+        private int id;
+        private String login;
+
+        public User(int id, String login) {
             this.id = id;
-            this.name = name;
+            this.login = login;
+        }
+
+        public User() {
         }
 
         public int getId() {
             return id;
         }
 
-        public String getName() {
-            return name;
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public void setLogin(String login) {
+            this.login = login;
         }
     }
 }

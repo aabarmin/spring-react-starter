@@ -1,7 +1,4 @@
 const initialState = {
-    activeSection: 1,
-
-
     users: [],
     isLoading: false
 };
@@ -10,9 +7,7 @@ const ACTION_USERS_LOAD = "load_users";
 const ACTION_USERS_LOADED = "loaded_users";
 const ACTION_USERS_LOAD_FAILED = "load_failed";
 
-
-
-export function loadUsers() {
+export function usersLoad() {
     return {
         types: [ ACTION_USERS_LOAD, ACTION_USERS_LOADED, ACTION_USERS_LOAD_FAILED ],
         promise: (client) => {
@@ -21,34 +16,101 @@ export function loadUsers() {
     }
 }
 
-const SECTION_SELECT = "users_section_select";
+const USER_SWITCH_TO_EDIT = "user_switch_to_edit";
 
-export function sectionSelect(sectionKey) {
+export function userSwitchToEdit(id) {
     return {
-        type: SECTION_SELECT,
-        section: sectionKey
+        type: USER_SWITCH_TO_EDIT,
+        id: id
     }
-};
+}
+
+const USER_SWITCH_TO_READ = "user_switch_to_read";
+
+function userSwitchToRead(id) {
+    return {
+        type: USER_SWITCH_TO_READ,
+        id: id
+    };
+}
+
+const USER_SAVE = "user_save";
+const USER_SAVED = "user_saved";
+const USER_SAVE_ERROR = "user_save_error";
+
+export function userSave(data) {
+    return {
+        types: [ USER_SAVE, USER_SAVED, USER_SAVE_ERROR],
+        promise: (client) => client.post('/users/', data),
+        afterSuccess: dispatch => {
+            dispatch(userSwitchToRead(data.id))
+        }
+    }
+}
 
 const users = (state = initialState, action) => {
     switch (action.type) {
-        // --- sidebar sections
-        case SECTION_SELECT:
+        // --- load users
+        case ACTION_USERS_LOAD:
             return {
                 ...state,
-                activeSection: action.section
+                isLoading: true,
+                users: []
             };
 
-        case ACTION_USERS_LOAD:
+        case ACTION_USERS_LOADED:
+            const users =  action.data.data;
+            // loaded users are not editable yet
+            users.forEach(user => user.isEditable = false);
+            return {
+                ...state,
+                isLoading: false,
+                users: users
+            };
+
+        // --- save user
+        case USER_SAVE:
             return {
                 ...state,
                 isLoading: true
             };
 
-        case ACTION_USERS_LOADED:
+        case USER_SAVED:
+            const savedUser = action.data.data;
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
+                users: [...state.users].map(user => {
+                    if (user.id === savedUser.id) {
+                        return Object.assign(user, savedUser);
+                    }
+                    return user;
+                })
+            };
+
+        // --- switch user to edit and back again
+        case USER_SWITCH_TO_EDIT:
+            const usersForUpdate = [...state.users];
+            usersForUpdate.forEach(user => {
+                if (user.id === action.id) {
+                    user.isEditable = true;
+                }
+            });
+            return {
+                ...state,
+                users: usersForUpdate
+            };
+
+        case USER_SWITCH_TO_READ:
+            const usersForUpdateToRead = [...state.users];
+            usersForUpdateToRead.forEach(user => {
+                if (user.id === action.id) {
+                    user.isEditable = false;
+                }
+            });
+            return {
+                ...state,
+                users: usersForUpdateToRead
             };
 
         default:
