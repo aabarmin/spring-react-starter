@@ -1,13 +1,12 @@
+language: java
 jobs:
   include:
     - stage: Clean
       language: java
       script: ./gradlew :backend:clean
     - stage: Build
-      language: java
       script: ./gradlew :backend:build -x test
     - script: ./gradlew :frontend:build
     - stage: Test
-      language: java
       script: ./gradlew :backend:test
     - script: ./gradlew :frontend:test
