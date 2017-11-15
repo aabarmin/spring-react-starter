@@ -5,7 +5,7 @@ jobs:
       script: ./gradlew :backend:clean
     - stage: Build
       script: ./gradlew :backend:build -x test
-      script: ./gradlew :frontend:build
+    - script: ./gradlew :frontend:build
     - stage: Test
       script: ./gradlew :backend:test
-      script: ./gradlew :frontend:test
+    - script: ./gradlew :frontend:test
