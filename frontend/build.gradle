@@ -11,8 +11,18 @@ task installDependencies(type: NpmTask) {
 	args = ['install']
 }
 
+task build(type: NpmTask) {
+    args = ['run', 'build']
+}
+
+task test(type: NpmTask) {
+    args = ['test']
+}
+
 task start(type: YarnTask) {
     args = ['start']
 }
 
 start.dependsOn(installDependencies);
+build.dependsOn(installDependencies);
+test.dependsOn(installDependencies);
