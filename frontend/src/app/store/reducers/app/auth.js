@@ -24,7 +24,7 @@ export function authenticate(username, password) {
         afterSuccess: (dispatch, getState, response) => {
             // dispatching last action
             const state = getState();
-            const lastAction = state.authentication.lastAction;
+            const lastAction = state.app.auth.lastAction;
             if (lastAction) {
                 dispatch(lastAction);
             }

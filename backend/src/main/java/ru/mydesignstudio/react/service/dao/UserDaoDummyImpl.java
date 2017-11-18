@@ -26,6 +26,16 @@ public class UserDaoDummyImpl implements UserDao {
     }
 
     @Override
+    public User findOne(int id) {
+        return users.get(id);
+    }
+
+    @Override
+    public void delete(User user) {
+        users.remove(user.getId());
+    }
+
+    @Override
     public User create() {
         final User user = new User();
         return save(user);

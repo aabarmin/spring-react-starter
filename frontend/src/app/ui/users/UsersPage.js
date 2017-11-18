@@ -1,44 +1,18 @@
-import React, { Component } from 'react';
-import {Col, Row} from "react-bootstrap";
-import {connect} from "react-redux";
-import {userCreate, userSave, usersLoad, userSwitchToEdit, userSwitchToRead} from "../../store/reducers/users/users";
+import React from 'react';
+import {Route} from "react-router-dom";
 import UsersList from "./UsersList";
+import UsersForm from "./UsersForm";
 
-const listProps = state => ({
-    users: state.users.users,
-    isLoading: state.users.isLoading
-});
-
-const listActions = dispatch => ({
-    usersLoad: () => {
-        dispatch(usersLoad());
-    },
-    userSwitchToEdit: (id) => {
-        dispatch(userSwitchToEdit(id));
-    },
-    userSwitchToRead: (id) => {
-        dispatch(userSwitchToRead(id));
-    },
-    userSave: (data) => {
-        dispatch(userSave(data));
-    },
-    userCreate: () => {
-        dispatch(userCreate());
-    }
-});
-
-const WrappedList = connect(listProps, listActions)(UsersList);
-
-class UsersPage extends Component {
-    render() {
-        return (
-            <Row>
-                <Col sm={12}>
-                    <WrappedList/>
-                </Col>
-            </Row>
-        )
-    }
-}
+const UsersPage = (props) => {
+    return [
+        <Route exact
+               path="/users/"
+               key="userList"
+               component={UsersList} />,
+        <Route path="/users/:id"
+               key="userFormT"
+               component={UsersForm} />
+    ]
+};
 
 export default UsersPage;

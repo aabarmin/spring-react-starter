@@ -22,4 +22,12 @@ public class UserService {
     public User create() {
         return userDao.create();
     }
+
+    public User findOne(int id) {
+        return userDao.findOne(id);
+    }
+
+    public void delete(User user) {
+        userDao.delete(user);
+    }
 }

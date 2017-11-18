@@ -1,14 +1,11 @@
-import { createStore } from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import thunkMiddleware from 'redux-thunk'
-import { combineReducers, applyMiddleware } from 'redux';
 import promiseMiddleware from './promiseMiddleware';
-
-import auth from './reducers/app/auth';
 import users from './reducers/users/users';
+import app from "./reducers/app/app";
 
 const rootReducer = combineReducers({
-    authentication: auth,
-    users: users
+    users, app
 });
 
 const initialState = {};

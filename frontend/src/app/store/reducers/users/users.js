@@ -1,38 +1,36 @@
+import {notificationShow} from "../app/notifications";
+
 const initialState = {
     users: [],
+    currentUser: {},
     isLoading: false
 };
 
-const ACTION_USERS_LOAD = "load_users";
-const ACTION_USERS_LOADED = "loaded_users";
-const ACTION_USERS_LOAD_FAILED = "load_failed";
+const USERS_LOAD = "load_users";
+const USERS_LOADED = "loaded_users";
+const USERS_LOAD_ERROR = "load_failed";
 
 export function usersLoad() {
     return {
-        types: [ ACTION_USERS_LOAD, ACTION_USERS_LOADED, ACTION_USERS_LOAD_FAILED ],
+        types: [ USERS_LOAD, USERS_LOADED, USERS_LOAD_ERROR ],
         promise: (client) => {
             return client.get('/users/')
         }
     }
 }
 
-const USER_SWITCH_TO_EDIT = "user_switch_to_edit";
+const USER_LOAD = "user_load";
+const USER_LOADED = "user_loaded";
+const USER_LOAD_ERROR = "user_load_error";
 
-export function userSwitchToEdit(id) {
+export const userLoad = (id) => {
     return {
-        type: USER_SWITCH_TO_EDIT,
-        id: id
+        types: [ USER_LOAD, USER_LOADED, USER_LOAD_ERROR ],
+        promise: (client) => {
+            return client.get('/users/' + id)
+        }
     }
-}
-
-const USER_SWITCH_TO_READ = "user_switch_to_read";
-
-export function userSwitchToRead(id) {
-    return {
-        type: USER_SWITCH_TO_READ,
-        id: id
-    };
-}
+};
 
 const USER_SAVE = "user_save";
 const USER_SAVED = "user_saved";
@@ -42,41 +40,39 @@ export function userSave(data) {
     return {
         types: [ USER_SAVE, USER_SAVED, USER_SAVE_ERROR ],
         promise: (client) => client.post('/users/', data),
-        afterSuccess: dispatch => {
-            dispatch(userSwitchToRead(data.id))
+        afterSuccess: (dispatch) => {
+            dispatch(notificationShow("User saved"));
         }
     }
 }
 
-const USER_CREATE = "user_create";
-const USER_CREATED = "user_created";
-const USER_CREATE_ERROR = "user_create_error";
+const USER_DELETE = "user_delete";
+const USER_DELETED = "user_deleted";
+const USER_DELETE_ERROR = "user_delete_error";
 
-export function userCreate() {
+export function userDelete(id) {
     return {
-        types: [ USER_CREATE, USER_CREATED, USER_CREATE_ERROR ],
-        promise: (client) => client.get('/users/new/')
+        types: [USER_DELETE, USER_DELETED, USER_DELETE_ERROR],
+        promise: (client) => client.delete('/users/' + id),
+        afterSuccess: (dispatch) => dispatch(notificationShow("User deleted"))
     }
 }
 
 const users = (state = initialState, action) => {
     switch (action.type) {
         // --- load users
-        case ACTION_USERS_LOAD:
+        case USERS_LOAD:
             return {
                 ...state,
                 isLoading: true,
                 users: []
             };
 
-        case ACTION_USERS_LOADED:
-            const users =  action.data.data;
-            // loaded users are not editable yet
-            users.forEach(user => user.isEditable = false);
+        case USERS_LOADED:
             return {
                 ...state,
                 isLoading: false,
-                users: users
+                users: action.data.data
             };
 
         // --- save user
@@ -91,6 +87,7 @@ const users = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                currentUser: savedUser,
                 users: [...state.users].map(user => {
                     if (user.id === savedUser.id) {
                         return Object.assign(user, savedUser);
@@ -99,46 +96,33 @@ const users = (state = initialState, action) => {
                 })
             };
 
-        // --- create user
-        case USER_CREATE:
+        // --- load user
+        case USER_LOAD:
+            return {
+                ...state,
+                isLoading: true,
+                currentUser: {}
+            };
+
+        case USER_LOADED:
+            return {
+                ...state,
+                isLoading: false,
+                currentUser: action.data.data
+            };
+
+        // --- delete user
+        case USER_DELETE:
             return {
                 ...state,
                 isLoading: true
             };
 
-        case USER_CREATED:
-            const newUser = action.data.data;
-            newUser.isEditable = true;
+        case USER_DELETED:
             return {
                 ...state,
-                isLoading: false,
-                users: [newUser].concat(state.users)
-            };
-
-        // --- switch user to edit and back again
-        case USER_SWITCH_TO_EDIT:
-            const usersForUpdate = [...state.users];
-            usersForUpdate.forEach(user => {
-                if (user.id === action.id) {
-                    user.isEditable = true;
-                }
-            });
-            return {
-                ...state,
-                users: usersForUpdate
-            };
-
-        case USER_SWITCH_TO_READ:
-            const usersForUpdateToRead = [...state.users];
-            usersForUpdateToRead.forEach(user => {
-                if (user.id === action.id) {
-                    user.isEditable = false;
-                }
-            });
-            return {
-                ...state,
-                users: usersForUpdateToRead
-            };
+                isLoading: false
+            }
 
         default:
             return state;

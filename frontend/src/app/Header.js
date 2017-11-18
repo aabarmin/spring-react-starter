@@ -1,33 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
+import {AppBar} from "material-ui";
 
-import Navbar from 'react-bootstrap/lib/Navbar';
-import NavbarHeader from 'react-bootstrap/lib/NavbarHeader';
-import NavbarBrand from 'react-bootstrap/lib/NavbarBrand';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
+const Header = (props) => {
+    return (
+        <AppBar title="Spring React Starter"
+                onTitleTouchTap={props.handleTitleClick}
+                onLeftIconButtonTouchTap={props.handleSidebarOpen}/>
+    )
+};
 
-class Header extends Component {
-    render() {
-        return (
-            <Navbar>
-                <NavbarHeader>
-                    <NavbarBrand>
-                        Sprint React Starter
-                    </NavbarBrand>
-                </NavbarHeader>
-                <Nav>
-                    <NavItem componentClass={Link} to="/" href="/">
-                        Home
-                    </NavItem>
-                    <NavItem componentClass={Link} to="/users/" href="/users/">
-                        Users
-                    </NavItem>
-                </Nav>
-            </Navbar>
-        )
-    }
-}
+Header.propTypes = {
+    handleTitleClick: PropTypes.func.isRequired,
+    handleSidebarOpen: PropTypes.func.isRequired
+};
 
 export default Header;
