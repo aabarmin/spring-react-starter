@@ -5,3 +5,5 @@ frontend/node_modules
 .settings
 .classpath
 .project
+bin
+*.class
