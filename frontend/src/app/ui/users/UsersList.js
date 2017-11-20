@@ -18,6 +18,7 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import PropTypes from 'prop-types';
 import {usersLoad} from "../../store/reducers/users/users";
+import Paginator from '../shared/Paginator';
 import {ImageEdit, NavigationRefresh} from "material-ui/svg-icons/index";
 
 const ToolbarList = (props) => {
@@ -52,7 +53,7 @@ ToolbarList.propTypes = {
     handleRefresh: PropTypes.func.isRequired
 };
 
-const UsersTable = (props) => {
+const UsersTable = (props) => {	
     return (
         <Table>
             <TableHeader>
@@ -76,21 +77,41 @@ const UsersTable = (props) => {
                         </TableRowColumn>
                     </TableRow>
                 ))}
+                <TableRow>
+                	<TableRowColumn colspan={3}>
+                		<Paginator currentPage={props.currentPage}
+                					pagesTotal={props.pagesTotal}
+									onChange={props.handlePageChange} />
+                	</TableRowColumn>
+                </TableRow>
             </TableBody>
         </Table>
     )
 };
 
 UsersTable.propTypes = {
+    currentPage: PropTypes.number.isRequired,
+    pagesTotal: PropTypes.number.isRequired,
+    handlePageChange: PropTypes.func.isRequired,
+    
     users: PropTypes.array.isRequired,
     handleEdit: PropTypes.func.isRequired
 };
 
 class UsersList extends Component {
+	state = {
+			currentPage: 0,
+			pagesTotal: 0
+	};
+	
     componentDidMount() {
-        this.props.loadUsers();
+        this._loadUsers();
     }
-
+    
+    _loadUsers() {
+    	this.props.loadUsers();
+    }
+    
     handleCreate() {
         this.props.history.push('/users/new');
     }
@@ -100,7 +121,11 @@ class UsersList extends Component {
     }
 
     handleRefresh() {
-        this.props.loadUsers();
+        this._loadUsers();
+    }
+    
+    handlePageChange(page) {
+    	
     }
 
     render() {
