@@ -1,10 +1,12 @@
-package ru.mydesignstudio.react.service;
+package ru.mydesignstudio.react.domain;
 
-public class User {
+import ru.mydesignstudio.react.core.HaveDraft;
+
+public class User implements HaveDraft {
     private int id;
     private String login = "";
     private String password = "";
-    private boolean isDeleted;
+    private boolean draft;
 
     public int getId() {
         return id;
@@ -30,11 +32,15 @@ public class User {
         this.password = password;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
+	@Override
+	public boolean isDraft() {
+		return draft;
+	}
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
+	@Override
+	public void setDraft(boolean isDraft) {
+		this.draft = isDraft;
+	}
+
+
 }
