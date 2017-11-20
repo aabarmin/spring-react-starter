@@ -2,8 +2,8 @@ package ru.mydesignstudio.react.rest.user;
 
 public class UserForm {
 	private int id;
-	private String login;
-	private String password;
+	private String login = "";
+	private String password = "";
 	private boolean draft;
 	
 	public int getId() {

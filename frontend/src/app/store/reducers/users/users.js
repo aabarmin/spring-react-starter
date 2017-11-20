@@ -2,6 +2,7 @@ import {notificationShow} from "../app/notifications";
 
 const initialState = {
     users: [],
+    pagesTotal: 0,
     currentUser: {},
     isLoading: false
 };
@@ -10,11 +11,15 @@ const USERS_LOAD = "load_users";
 const USERS_LOADED = "loaded_users";
 const USERS_LOAD_ERROR = "load_failed";
 
-export function usersLoad() {
+export function usersLoad(page) {
     return {
         types: [ USERS_LOAD, USERS_LOADED, USERS_LOAD_ERROR ],
         promise: (client) => {
-            return client.get('/users/')
+            return client.get('/users/', {
+            	params: {
+            		page: page
+            	}
+            })
         }
     }
 }
@@ -72,7 +77,8 @@ const users = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                users: action.data.data
+                users: action.data.data.items,
+                pagesTotal: action.data.data.totalPages
             };
 
         // --- save user

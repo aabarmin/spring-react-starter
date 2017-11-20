@@ -1,13 +1,16 @@
 package ru.mydesignstudio.react.service.user;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import ru.mydesignstudio.react.domain.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -41,8 +44,9 @@ public class UserDaoDummyImpl implements UserDao {
 
 	@Override
 	public Page<User> findPage(Pageable pageInfo, boolean withDrafts) {
-		// TODO Auto-generated method stub
-		return null;
+		final List<User> items = new ArrayList<>();
+		items.addAll(users.values());
+		return new PageImpl<User>(items);
 	}
 
 	@Override

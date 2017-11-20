@@ -7,6 +7,7 @@ import {
     TableBody,
     TableHeader,
     TableHeaderColumn,
+    TableFooter, 
     TableRow,
     TableRowColumn,
     Toolbar,
@@ -77,14 +78,16 @@ const UsersTable = (props) => {
                         </TableRowColumn>
                     </TableRow>
                 ))}
-                <TableRow>
-                	<TableRowColumn colspan={3}>
-                		<Paginator currentPage={props.currentPage}
-                					pagesTotal={props.pagesTotal}
-									onChange={props.handlePageChange} />
-                	</TableRowColumn>
-                </TableRow>
             </TableBody>
+            <TableFooter adjustForCheckbox={false}>
+	            <TableRow>
+	            	<TableRowColumn colSpan={3}>
+	            		<Paginator currentPage={props.currentPage}
+	            					pagesTotal={props.pagesTotal}
+									onChange={props.handlePageChange} />
+	            	</TableRowColumn>
+	            </TableRow>
+            </TableFooter>            
         </Table>
     )
 };
@@ -108,8 +111,14 @@ class UsersList extends Component {
         this._loadUsers();
     }
     
+    componentWillReceiveProps(nextProps) {
+    	this.setState({
+    		pagesTotal: nextProps.userPagesCount
+    	});
+    }
+    
     _loadUsers() {
-    	this.props.loadUsers();
+    	this.props.loadUsers(this.state.currentPage);
     }
     
     handleCreate() {
@@ -125,7 +134,10 @@ class UsersList extends Component {
     }
     
     handlePageChange(page) {
-    	
+    	this.setState({
+    		currentPage: page
+    	});
+    	this._loadUsers();
     }
 
     render() {
@@ -137,6 +149,9 @@ class UsersList extends Component {
 
             <UsersTable key="list"
                         users={this.props.users}
+            			pagesTotal={this.props.userPagesCount}
+            			handlePageChange={this.handlePageChange.bind(this)}
+            			currentPage={this.state.currentPage}
                         handleEdit={this.handleEdit.bind(this)}/>
         ]
     }
@@ -147,17 +162,19 @@ UsersList.propTypes = {
 
     isLoading: PropTypes.bool.isRequired,
     users: PropTypes.array.isRequired,
+    userPagesCount: PropTypes.number.isRequired,
 
     loadUsers: PropTypes.func.isRequired
 };
 
 const mapState = (state) => ({
     users: state.users.users,
+    userPagesCount: state.users.pagesTotal,
     isLoading: state.users.isLoading
 });
 
 const mapActions = (dispatch) => ({
-    loadUsers: () => dispatch(usersLoad())
+    loadUsers: (page) => dispatch(usersLoad(page))
 });
 
 export default withRouter(connect(mapState, mapActions)(UsersList));
