@@ -25,7 +25,7 @@ const Paginator = (props) => {
 		actions.push(<FlatButton label={i} onClick={e => props.onChange(i)} />);
 	}
 	// if page is last, don't add "Next" button
-	if (props.currentPage == (props.pagesTotal - 1)) {
+	if (props.currentPage === (props.pagesTotal - 1)) {
 		const nextButton = <FlatButton label="Next" onClick={e => props.onChange(props.currentPage + 1)} />;	
 		actions.push(nextButton);
 	}
