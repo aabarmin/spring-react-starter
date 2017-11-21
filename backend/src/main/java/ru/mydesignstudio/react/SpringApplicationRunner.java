@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 @SpringBootApplication
+/*
 @EnableAutoConfiguration(exclude = {
         DataSourceAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class
 })
+*/
 public class SpringApplicationRunner {
     public static void main(String[] args) {
         SpringApplication.run(SpringApplicationRunner.class, args);
