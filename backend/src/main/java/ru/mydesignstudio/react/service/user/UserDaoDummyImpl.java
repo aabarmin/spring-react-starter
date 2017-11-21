@@ -44,9 +44,13 @@ public class UserDaoDummyImpl implements UserDao {
 
 	@Override
 	public Page<User> findPage(Pageable pageInfo, boolean withDrafts) {
-		final List<User> items = new ArrayList<>();
+		List<User> items = new ArrayList<>();
 		items.addAll(users.values());
-		return new PageImpl<User>(items);
+		items = items.subList(
+				pageInfo.getOffset(),
+				pageInfo.getPageNumber() * pageInfo.getPageSize()
+				);
+		return new PageImpl<User>(items, pageInfo, users.size());
 	}
 
 	@Override

@@ -1,0 +1,1 @@
+docker run --name mds_postgres -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -d postgres:10.1
