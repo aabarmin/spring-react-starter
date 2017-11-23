@@ -1,0 +1,1 @@
+docker run --name mds_pgadmin --link mds_postgres:postgres -p 5050:5050 -d fenglc/pgadmin4
