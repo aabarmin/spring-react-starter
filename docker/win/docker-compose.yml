@@ -1,0 +1,25 @@
+version: '3'
+services:
+    postgres:
+        ports:
+            - "5432:5432"
+        image: "postgres:10"
+        environment:
+            - PGDATA=/var/lib/postgresql/data
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_USER=user
+            - POSTGRES_DB=dbapp
+    pgadmin:
+        ports: 
+            - "5050:5050"
+        links:
+            - postgres
+        image: "fenglc/pgadmin4"
+        environment:
+            - DEFAULT_USER=admin
+            - DEFAULT_PASSWORD=admin
+        depends_on:
+            - postgres
+volumes:
+    pgdata:
+        driver: local
