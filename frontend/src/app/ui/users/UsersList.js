@@ -10,6 +10,7 @@ import {
     TableFooter, 
     TableRow,
     TableRowColumn,
+    Toggle,
     Toolbar,
     ToolbarGroup,
     ToolbarSeparator,
@@ -26,15 +27,26 @@ const ToolbarList = (props) => {
     const loading = props.isLoading ?
         <LinearProgress mode="indeterminate" key="progress" /> :
         null;
+    
+    const toggleStyle = {
+    		width: '70px'
+    };
 
     return [
         <Toolbar key="toolbar">
             <ToolbarGroup>
                 <ToolbarTitle text="Users" />
             </ToolbarGroup>
+                
             <ToolbarGroup>
+                <Toggle label="Drafts"
+                		style={toggleStyle}
+                		toggled={props.isShowDrafts}
+                		onToggle={props.onShowDraftsToggle}
+                		labelPosition="right" />
+                
                 <ToolbarSeparator />
-
+                			
                 <IconButton onClick={props.handleRefresh}>
                     <NavigationRefresh />
                 </IconButton>
@@ -49,6 +61,9 @@ const ToolbarList = (props) => {
 };
 
 ToolbarList.propTypes = {
+    isShowDrafts: PropTypes.bool.isRequired,
+    onShowDraftsToggle: PropTypes.func.isRequired, 
+		
     isLoading: PropTypes.bool.isRequired,
     handleCreate: PropTypes.func.isRequired,
     handleRefresh: PropTypes.func.isRequired
@@ -104,7 +119,8 @@ UsersTable.propTypes = {
 class UsersList extends Component {
 	state = {
 			currentPage: 0,
-			pagesTotal: 0
+			pagesTotal: 0,
+			showDrafts: false
 	};
 	
     componentDidMount() {
@@ -118,7 +134,7 @@ class UsersList extends Component {
     }
     
     _loadUsers() {
-    	this.props.loadUsers(this.state.currentPage);
+    	this.props.loadUsers(this.state.currentPage, this.state.showDrafts);
     }
     
     handleCreate() {
@@ -136,14 +152,25 @@ class UsersList extends Component {
     handlePageChange(page) {
     	this.setState({
     		currentPage: page
+    	}, () => {
+    		this._loadUsers();
     	});
-    	this._loadUsers();
+    }
+    
+    handleShowDraftsToggle = (event, checked) => {
+    	this.setState({
+    		showDrafts: !this.state.showDrafts
+    	}, () => {
+    		this._loadUsers();
+    	});
     }
 
     render() {
         return [
             <ToolbarList key="toolbar"
+            			 isShowDrafts={this.state.showDrafts}
                          isLoading={this.props.isLoading}
+            			 onShowDraftsToggle={this.handleShowDraftsToggle.bind(this)}
                          handleRefresh={this.handleRefresh.bind(this)}
                          handleCreate={this.handleCreate.bind(this)} />,
 
@@ -174,7 +201,7 @@ const mapState = (state) => ({
 });
 
 const mapActions = (dispatch) => ({
-    loadUsers: (page) => dispatch(usersLoad(page))
+    loadUsers: (page, withDrafts) => dispatch(usersLoad(page, withDrafts))
 });
 
 export default withRouter(connect(mapState, mapActions)(UsersList));

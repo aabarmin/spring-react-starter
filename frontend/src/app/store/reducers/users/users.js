@@ -11,13 +11,14 @@ const USERS_LOAD = "load_users";
 const USERS_LOADED = "loaded_users";
 const USERS_LOAD_ERROR = "load_failed";
 
-export function usersLoad(page) {
+export function usersLoad(page, showDrafts) {
     return {
         types: [ USERS_LOAD, USERS_LOADED, USERS_LOAD_ERROR ],
         promise: (client) => {
             return client.get('/users/', {
             	params: {
-            		page: page
+            		page: page,
+            		showDrafts: showDrafts
             	}
             })
         }

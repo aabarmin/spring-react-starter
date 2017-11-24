@@ -10,8 +10,14 @@ const Paginator = (props) => {
 		const prevButton = <FlatButton label="Prev" key="prev" onClick={e => props.onChange(props.currentPage - 1)} />;
 		actions.push(prevButton);
 	}
+	
 	// add interval [current - 3, current - 1]
-	const startLeft = Math.max(props.currentPage - 3, 0);
+	const startLeft = Math.max(
+			props.currentPage - 3,
+			props.currentPage - 2,
+			props.currentPage - 1,
+			0
+			);
 	const startRight = Math.max(props.currentPage - 1, 0);
 	for (let i = startLeft; i < startRight; i++) {
 		actions.push(<FlatButton label={i} key={i} onClick={e => props.onChange(i)} />);
@@ -22,7 +28,7 @@ const Paginator = (props) => {
 	const endLeft = Math.min(props.pagesTotal, props.currentPage + 1);
 	const endRight = Math.min(props.pagesTotal, props.currentPage + 3);
 	for (let i = endLeft; i < endRight; i++) {
-		actions.push(<FlatButton label={i} key={i} onClick={e => props.onChange(i)} />);
+		actions.push(<FlatButton label={(i + 1)} key={(i + 1)} onClick={e => props.onChange(i)} />);
 	}
 	// if page is last, don't add "Next" button
 	if (props.currentPage < (props.pagesTotal - 1)) {

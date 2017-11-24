@@ -29,7 +29,7 @@ public class UserController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public PageResultForm<UserForm> listPage(@RequestParam(name = "page", defaultValue = "0") int page,
     		@RequestParam(name = "showDrafts", defaultValue = "false") boolean showDrafts,
-    		@RequestParam(name = "pageSize", defaultValue = "50") int pageSize) {
+    		@RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
     	
     	final Pageable pageRequest = new PageRequest(page, pageSize);
     	final Page<User> pageResult = userService.findPage(pageRequest, showDrafts);
