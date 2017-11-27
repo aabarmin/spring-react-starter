@@ -12,15 +12,10 @@ const Paginator = (props) => {
 	}
 	
 	// add interval [current - 3, current - 1]
-	const startLeft = Math.max(
-			props.currentPage - 3,
-			props.currentPage - 2,
-			props.currentPage - 1,
-			0
-			);
-	const startRight = Math.max(props.currentPage - 1, 0);
+	const startLeft = Math.max(props.currentPage - 3, 0);
+	const startRight = Math.max(props.currentPage - 1, props.currentPage);
 	for (let i = startLeft; i < startRight; i++) {
-		actions.push(<FlatButton label={i} key={i} onClick={e => props.onChange(i)} />);
+		actions.push(<FlatButton label={(i + 1)} key={i} onClick={e => props.onChange(i)} />);
 	}
 	// add current page
 	actions.push(<FlatButton label={(props.currentPage + 1).toString()} key="current" disabled={true} />);

@@ -8,7 +8,8 @@ axios.defaults.headers.common['Accept'] = 'application/json';
 axios.interceptors.response.use(data => {
     return data;
 }, error => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && (error.response.status === 401 
+    		|| error.response.status === 403)) {
         // process as a standard response
         return error;
     }
@@ -39,7 +40,8 @@ export default function promiseMiddleware({ dispatch, getState }) {
         next({...rest, type: REQUEST});
         // creating onSuccess function
         const onSuccess = (data) => {
-            if (data.response && data.response.status && data.response.status === 401) {
+            if (data.response && data.response.status && (data.response.status === 401 
+            		|| data.response.status === 403)) {
                 next({
                     type: AUTH_LOGIN_SHOW,
                     target: data.config.url,

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {
+	Avatar,
+	Chip,
     IconButton,
     LinearProgress,
     RaisedButton,
@@ -70,23 +72,36 @@ ToolbarList.propTypes = {
 };
 
 const UsersTable = (props) => {	
+	const idCellStyle = {
+			width: '30px'
+	};
+	const actionsCellStyle = {
+			width: '100px'
+	};
+	const draftIcon = "D";
+	
     return (
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHeaderColumn>ID</TableHeaderColumn>
+                    <TableHeaderColumn style={idCellStyle}>ID</TableHeaderColumn>
                     <TableHeaderColumn>Login</TableHeaderColumn>
-                    <TableHeaderColumn/>
+                    <TableHeaderColumn style={actionsCellStyle}/>
                 </TableRow>
             </TableHeader>
             <TableBody>
                 {props.users.map((user) => (
                     <TableRow key={user.id}>
-                        <TableRowColumn>{user.id}</TableRowColumn>
+                        <TableRowColumn style={idCellStyle}>{user.id}</TableRowColumn>
                         <TableRowColumn>
-                            {user.login}
+                        	<Chip>
+                        		<Avatar size={32}>
+                        			{user.draft === true ? draftIcon : user.login.substr(0, 2)}
+                        		</Avatar>
+                            	{user.login}
+                            </Chip>
                         </TableRowColumn>
-                        <TableRowColumn>
+                        <TableRowColumn style={actionsCellStyle}>
                             <IconButton onClick={e => props.handleEdit(user.id)}>
                                 <ImageEdit />
                             </IconButton>
@@ -159,7 +174,8 @@ class UsersList extends Component {
     
     handleShowDraftsToggle = (event, checked) => {
     	this.setState({
-    		showDrafts: !this.state.showDrafts
+    		showDrafts: !this.state.showDrafts, 
+    		currentPage: 0
     	}, () => {
     		this._loadUsers();
     	});

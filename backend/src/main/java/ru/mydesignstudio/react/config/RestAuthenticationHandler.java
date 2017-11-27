@@ -33,7 +33,8 @@ public class RestAuthenticationHandler extends BasicAuthenticationEntryPoint
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setHeader("login_status", "failure");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         PrintWriter writer = response.getWriter();
         writer.println("HTTP Status 401 - " + authException.getMessage());
     }
