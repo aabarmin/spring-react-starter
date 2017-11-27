@@ -9,7 +9,7 @@ import {sidebarClose, sidebarOpen} from "./app/store/reducers/app/layout";
 import NotificationBar from "./app/NotificationBar";
 import {withRouter} from "react-router-dom";
 import LoginDialog from "./app/ui/login/LoginDialog";
-import {authenticate} from "./app/store/reducers/app/auth";
+import {authenticate, currentUserLoad, currentUserLogout} from "./app/store/reducers/app/auth";
 
 class Application extends Component {
     state = {
@@ -41,11 +41,22 @@ class Application extends Component {
         this.props.login(this.state.login, this.state.password);
     }
 
+    handleLogout() {
+        this.props.logout();
+    }
+
+    componentDidMount() {
+        this.props.currentUserLoad();
+    }
+
     render() {
         return (
             <content>
                 <Header handleSidebarOpen={this.handleSidebarOpen.bind(this)}
-                        handleTitleClick={this.handleHeaderTitleClick.bind(this)}/>
+                        handleTitleClick={this.handleHeaderTitleClick.bind(this)}
+                        currentUser={this.props.currentUser}
+                        currentUserLoaded={this.props.currentUserLoaded}
+                        onLogout={this.handleLogout.bind(this)} />
 
                 <Sidebar open={this.props.sidebarOpened}
                          handleClose={this.handleSidebarClose.bind(this)}/>
@@ -68,6 +79,11 @@ class Application extends Component {
 Application.propTypes = {
     history: PropTypes.object.isRequired,
 
+    currentUser: PropTypes.object.isRequired,
+    currentUserLoaded: PropTypes.bool.isRequired,
+    currentUserLoad: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+
     notificationBarOpened: PropTypes.bool.isRequired,
     notificationBarMessage: PropTypes.string.isRequired,
 
@@ -89,14 +105,20 @@ const mapState = (state) => ({
 
     loginOpened: state.app.auth.isDialogVisible,
     loginProgress: state.app.auth.inProgress,
-    loginError: state.app.auth.loginException
+    loginError: state.app.auth.loginException,
+
+    currentUser: state.app.auth.currentUser,
+    currentUserLoaded: state.app.auth.currentUserLoaded
 });
 
 const mapActions = (dispatch) => ({
     sidebarOpen: () => dispatch(sidebarOpen()),
     sidebarClose: () => dispatch(sidebarClose()),
 
-    login: (login, password) => dispatch(authenticate(login, password))
+    login: (login, password) => dispatch(authenticate(login, password)),
+
+    currentUserLoad: () => dispatch(currentUserLoad()),
+    logout: () => dispatch(currentUserLogout())
 });
 
 export default withRouter(connect(mapState, mapActions)(Application));

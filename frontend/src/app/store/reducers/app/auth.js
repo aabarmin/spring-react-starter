@@ -5,7 +5,10 @@ const defaultState = {
     inProgress: false,
     isDialogVisible: false,
     loginException: "",
-    lastAction: null
+    lastAction: null,
+
+    currentUser: {},
+    currentUserLoaded: false
 };
 
 const AUTH_REQUEST_SEND = "auth_request_send";
@@ -31,6 +34,28 @@ export function authenticate(username, password) {
         }
     }
 }
+
+const CURRENT_USER_LOAD = "current_user_load";
+const CURRENT_USER_LOADED = "current_user_loaded";
+const CURRENT_USER_LOAD_FAIL = "current_user_load_failed";
+
+export const currentUserLoad = () => {
+    return {
+        types: [ CURRENT_USER_LOAD, CURRENT_USER_LOADED, CURRENT_USER_LOAD_FAIL ],
+        promise: (client) => client.get('/users/current')
+    }
+};
+
+const CURRENT_USER_LOGOUT = "current_user_logout";
+const CURRENT_USER_LOGGED_OUT = "current_user_logged_out";
+const CURRENT_USER_LOGOUT_FAIL = "current_user_logout_failed";
+
+export const currentUserLogout = () => {
+    return {
+        types: [ CURRENT_USER_LOGOUT, CURRENT_USER_LOGGED_OUT, CURRENT_USER_LOGOUT_FAIL ],
+        promise: (client) => client.get('/users/logout')
+    }
+};
 
 const auth = (state = defaultState, action) => {
     switch (action.type) {
@@ -66,6 +91,32 @@ const auth = (state = defaultState, action) => {
                 isDialogVisible: true,
                 loginException: action.error.message,
                 inProgress: false
+            };
+
+        // --- get current user
+        case CURRENT_USER_LOAD:
+            return {
+                ...state,
+                currentUser: {},
+                currentUserLoaded: false
+            };
+
+        case CURRENT_USER_LOADED:
+            return {
+                ...state,
+                currentUser: action.data.data,
+                currentUserLoaded: true
+            };
+
+        // --- logout
+        case CURRENT_USER_LOGOUT:
+            return state;
+
+        case CURRENT_USER_LOGGED_OUT:
+            return {
+                ...state,
+                currentUser: {},
+                currentUserLoaded: false
             };
     
     	default:
