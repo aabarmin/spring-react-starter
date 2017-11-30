@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
-import Dashboard from '../../dashboard/Dashboard';
+import Dashboard from '../ui/dashboard/Dashboard';
 
 import UsersPage from "../ui/users/UsersPage";
 

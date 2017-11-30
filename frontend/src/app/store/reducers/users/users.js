@@ -4,7 +4,10 @@ const initialState = {
     users: [],
     pagesTotal: 0,
     currentUser: {},
-    isLoading: false
+    isLoading: false,
+    
+    usersTotal: 0,
+    usersDrafts: 0
 };
 
 const USERS_LOAD = "load_users";
@@ -63,6 +66,15 @@ export function userDelete(id) {
         afterSuccess: (dispatch) => dispatch(notificationShow("User deleted"))
     }
 }
+
+const USER_STAT_LOAD = "user_stat_load";
+const USER_STAT_LOADED = "user_stat_loaded";
+const USER_STAT_LOAD_FAILED = "user_stat_load_error";
+
+export const userStatisticsLoad = () => ({
+	types: [ USER_STAT_LOAD, USER_STAT_LOADED, USER_STAT_LOAD_FAILED ],
+	promise: (client) => client.get('/users/stats')
+})
 
 const users = (state = initialState, action) => {
     switch (action.type) {
@@ -130,6 +142,21 @@ const users = (state = initialState, action) => {
                 ...state,
                 isLoading: false
             }
+            
+        // --- load statistics
+        case USER_STAT_LOAD:
+        	return {
+        		...state,
+        		isLoading: true
+        	}
+        	
+        case USER_STAT_LOADED:
+        	return {
+        		...state,
+        		isLoading: false,
+        	    usersTotal: action.data.data.usersTotal,
+        	    usersDrafts: action.data.data.usersDrafts
+        	}
 
         default:
             return state;

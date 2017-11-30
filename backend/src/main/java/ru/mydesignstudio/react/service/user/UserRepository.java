@@ -1,5 +1,7 @@
 package ru.mydesignstudio.react.service.user;
 
+import java.util.Collection;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +18,13 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	 * @return page of users
 	 */
 	Page<User> findAllByDraft(Pageable pageInfo, boolean draft);
+	
+	/**
+	 * Find all users by draft status.
+	 * @param draft draft status
+	 * @return collection of users
+	 */
+	Collection<User> findAllByDraft(boolean draft);
 	
 	/**
 	 * Find user by login.

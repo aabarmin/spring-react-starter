@@ -1,5 +1,7 @@
 package ru.mydesignstudio.react.service.user;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +43,11 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User findOne(String login) {
 		return userRepository.findOneByLogin(login);
+	}
+
+	@Override
+	public Collection<User> findAll(boolean withDrafts) {
+		return userRepository.findAllByDraft(withDrafts);
 	}
 
 }

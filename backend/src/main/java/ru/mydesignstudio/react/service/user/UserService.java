@@ -17,6 +17,10 @@ public class UserService {
     public Page<User> findPage(Pageable pageInfo, boolean withDrafts) {
     	return userDao.findPage(pageInfo, withDrafts);
     }
+    
+    public Collection<User> findAll(boolean withDrafts) {
+    	return userDao.findAll(withDrafts);
+    }
 
     public User save(User user) {
     	if (user.isDraft()) {

@@ -67,6 +67,14 @@ public class UserController {
         final User savedUser = userService.save(userFromClient);
         return userTransformer.bindForm(savedUser);
     }
+    
+    @RequestMapping(value = "/stats", method = RequestMethod.GET)
+    public UserDashboardStats stats() {
+    	return new UserDashboardStats(
+    			userService.findAll(false).size(),
+    			userService.findAll(true).size()
+    			);
+    }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public UserForm createNew() {

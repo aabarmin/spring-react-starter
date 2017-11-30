@@ -19,4 +19,6 @@ public interface UserDao {
     void delete(User user);
 
 	User findOne(String login);
+
+	Collection<User> findAll(boolean withDrafts);
 }
