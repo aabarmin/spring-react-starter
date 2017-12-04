@@ -1,0 +1,7 @@
+spring:
+  mvc:
+    dispatch-options-request: true
+    
+application:
+  user-service-config:
+    default-admin-login: admin
