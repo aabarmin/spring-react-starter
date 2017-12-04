@@ -3,7 +3,8 @@ import axios from 'axios';
 import { AUTH_LOGIN_SHOW, AUTH_TOKEN } from "./reducers/app/auth";
 
 // todo, move into configuration
-axios.defaults.baseURL = "http://localhost:8080/";
+const { REACT_APP_BACKEND_URL } = process.env;
+axios.defaults.baseURL = REACT_APP_BACKEND_URL;
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.interceptors.response.use(data => {
     return data;

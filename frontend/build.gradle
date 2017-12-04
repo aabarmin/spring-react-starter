@@ -24,5 +24,11 @@ task start(type: YarnTask) {
 }
 
 start.dependsOn(installDependencies);
-build.dependsOn(installDependencies);
 test.dependsOn(installDependencies);
+
+build.dependsOn(installDependencies);
+build.doFirst {
+	println "Cleaning frontend dist before build"
+	println "Deleting dir ${rootDir}/frontend/build" 
+	delete "${rootDir}/frontend/build"
+}
