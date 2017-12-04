@@ -22,8 +22,6 @@ public class AuthenticationConfiguration {
 	
     @Autowired
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.inMemoryAuthentication()
-                .withUser("admin").password("admin").roles("admin");
         builder.userDetailsService(userDetailsService)
         		.passwordEncoder(passwordEncoder);
     }

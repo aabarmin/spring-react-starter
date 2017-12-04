@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import ru.mydesignstudio.react.config.ApplicationConfiguration;
 import ru.mydesignstudio.react.domain.User;
 
 import java.util.Collection;
@@ -13,6 +14,8 @@ import java.util.Collection;
 public class UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ApplicationConfiguration applicationConfiguration;
     
     public Page<User> findPage(Pageable pageInfo, boolean withDrafts) {
     	return userDao.findPage(pageInfo, withDrafts);
@@ -45,5 +48,9 @@ public class UserService {
 
     public void delete(User user) {
         userDao.delete(user);
+    }
+    
+    public User getDefaultAdmin() {
+    	return findOne(applicationConfiguration.getUserServiceConfig().getDefaultAdminLogin());
     }
 }
