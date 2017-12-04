@@ -22,7 +22,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated().and()
+                .authorizeRequests()
+                		.antMatchers("/", "/static/**", "/service-worker.js").permitAll()
+                		.anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(authenticationHandler).and()
                 .formLogin().successHandler(authenticationHandler).and()
                 .formLogin().failureHandler(authenticationHandler);
