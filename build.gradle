@@ -2,13 +2,33 @@ apply plugin: 'base'
 
 version='0.1'
 
-task release(type: Copy) {
-	from '${rootDir}/backend/build/libs/backend-{$version}.jar'
-	into '${rootDir}/dist/app.jar'
+// main task for preparation of build for deploy to Heroku
+// before this task it's necessary to clean everything and build backend.
+// backend also will build frontend and pack it into the jar-file
+task release(dependsOn: ':backend:build') {
+    doLast {
+        def target = rootDir.getAbsolutePath() + '/dist';
+        def src = rootDir.getAbsolutePath() + '/backend/build/libs/backend.jar';
+        // create target dir
+        def targetDir = new File(target);
+        if (!targetDir.exists()) {
+            targetDir.mkdirs();
+        }
+        // clear target dir
+        for (File file : targetDir.listFiles()) {
+            file.delete();
+        }
+        // open source file
+        def srcFile = new File(src);
+        // move it
+        def targetFile = new File(target + '/app.jar');
+        srcFile.renameTo(targetFile);
+    }
 }
 
-// run backend build before. it will run frontend build too
-release.dependsOn('clean', ':backend:build');
-release.doFirst {
-	println "Application was build, copy it to ${rootDir}/dist/app.jar from ${rootDir}/backend/build/libs/backend-${version}.jar"
+// Heroku custom task, it does nothing
+task stage(dependsOn: 'release') {
+    doLast {
+        System.out.println("Done...")
+    }
 }
