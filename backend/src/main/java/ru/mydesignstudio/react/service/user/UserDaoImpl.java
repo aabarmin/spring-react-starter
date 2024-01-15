@@ -32,7 +32,8 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public User findOne(int id) {
-		return userRepository.findOne(id);
+		return userRepository.findById(id)
+				.orElseThrow();
 	}
 
 	@Override

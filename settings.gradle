@@ -10,5 +10,5 @@
 rootProject.name = 'spring-react-starter'
 
 /* Submodules */
-include 'frontend'
+//include 'frontend'
 include 'backend'

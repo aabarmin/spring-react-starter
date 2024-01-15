@@ -13,9 +13,9 @@ import {
     ToolbarTitle
 } from "material-ui";
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
 import {userDelete, userLoad, userSave} from "../../store/reducers/users/users";
 import {ActionDelete} from "material-ui/svg-icons/index";
+import { useNavigate } from 'react-router-dom';
 
 const UserToolbar = (props) => {
     return [
@@ -115,6 +115,7 @@ class UsersForm extends Component {
     };
 
     componentDidMount() {
+        this.navigate = useNavigate();
         this.props.userLoad(
             this.props.match.params.id
         );
@@ -137,7 +138,7 @@ class UsersForm extends Component {
     }
 
     handleBack() {
-        this.props.history.push('/users/');
+        this.navigate('/users/');
     }
 
     deleteDialogShow() {
@@ -156,7 +157,7 @@ class UsersForm extends Component {
 
     deleteDialogSubmit() {
         this.props.userDelete(this.state.id);
-        this.props.history.push('/users/');
+        this.history.push('/users/');
     }
 
     render() {
@@ -180,7 +181,6 @@ class UsersForm extends Component {
 }
 
 UsersForm.propTypes = {
-    history: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
 
     userLoad: PropTypes.func.isRequired,
@@ -199,4 +199,4 @@ const mapActions = (dispatch) => ({
     userDelete: (id) => dispatch(userDelete(id))
 });
 
-export default withRouter(connect(mapState, mapActions)(UsersForm));
+export default connect(mapState, mapActions)(UsersForm);

@@ -2,7 +2,7 @@ package ru.mydesignstudio.react.service.user;
 
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

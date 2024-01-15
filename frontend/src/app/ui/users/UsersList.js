@@ -19,7 +19,7 @@ import {
     ToolbarTitle
 } from "material-ui";
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import PropTypes from 'prop-types';
 import {usersLoad} from "../../store/reducers/users/users";
 import Paginator from '../shared/Paginator';
@@ -139,6 +139,7 @@ class UsersList extends Component {
 	};
 	
     componentDidMount() {
+        this.navigate = useNavigate();
         this._loadUsers();
     }
     
@@ -153,11 +154,11 @@ class UsersList extends Component {
     }
     
     handleCreate() {
-        this.props.history.push('/users/new');
+        this.navigate('/users/new');
     }
 
     handleEdit(id) {
-        this.props.history.push('/users/' + id);
+        this.navigate('/users/' + id);
     }
 
     handleRefresh() {
@@ -201,8 +202,6 @@ class UsersList extends Component {
 }
 
 UsersList.propTypes = {
-    history: PropTypes.object.isRequired,
-
     isLoading: PropTypes.bool.isRequired,
     users: PropTypes.array.isRequired,
     userPagesCount: PropTypes.number.isRequired,
@@ -220,4 +219,4 @@ const mapActions = (dispatch) => ({
     loadUsers: (page, withDrafts) => dispatch(usersLoad(page, withDrafts))
 });
 
-export default withRouter(connect(mapState, mapActions)(UsersList));
+export default connect(mapState, mapActions)(UsersList);

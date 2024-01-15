@@ -1,13 +1,7 @@
 package ru.mydesignstudio.react.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import ru.mydesignstudio.react.core.HaveDraft;
 
 @Entity
