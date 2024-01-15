@@ -5,17 +5,18 @@ import {
 	Paper
 } from 'material-ui';
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import UsersCard from '../users/UsersCard';
 import {userStatisticsLoad} from '../../store/reducers/users/users';
 
 class Dashboard extends Component {
 	componentDidMount = () => {
 		this.props.usersStatisticsLoad();
+		this.navigate = useNavigate();
 	}
 	
 	handleUsersListClick = () => {
-		this.props.history.push('/users');
+		this.navigate('/users');
 	}
 	
 	render = () => {
@@ -39,8 +40,6 @@ class Dashboard extends Component {
 };
 
 Dashboard.propTypes = {
-		history: PropTypes.object.isRequired,
-		
 		usersIsLoading: PropTypes.bool.isRequired,
 		usersTotal: PropTypes.number.isRequired,
 		usersDrafts: PropTypes.number.isRequired,
@@ -57,4 +56,4 @@ const mapActions = (dispatch) => ({
 	usersStatisticsLoad: () => { dispatch(userStatisticsLoad()) }
 });
 
-export default withRouter(connect(mapState, mapActions)(Dashboard));
+export default connect(mapState, mapActions)(Dashboard);
