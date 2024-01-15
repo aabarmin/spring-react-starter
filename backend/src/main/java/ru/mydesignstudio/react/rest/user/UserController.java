@@ -1,27 +1,19 @@
 package ru.mydesignstudio.react.rest.user;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import ru.mydesignstudio.react.core.CollectionTransformer;
 import ru.mydesignstudio.react.core.PageResultForm;
 import ru.mydesignstudio.react.domain.User;
 import ru.mydesignstudio.react.service.session.SessionService;
 import ru.mydesignstudio.react.service.user.UserService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/users")
 @RestController
@@ -40,8 +32,7 @@ public class UserController {
     		@RequestParam(name = "showDrafts", defaultValue = "false") boolean showDrafts,
     		@RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
     	
-    	final Pageable pageRequest = new PageRequest(page, pageSize);
-    	final Page<User> pageResult = userService.findPage(pageRequest, showDrafts);
+    	final Page<User> pageResult = userService.findPage(PageRequest.of(page, pageSize), showDrafts);
     	return new PageResultForm<>(
     			pageResult.getTotalPages(), 
     			page, 
