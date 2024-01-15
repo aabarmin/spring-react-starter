@@ -23,10 +23,10 @@ dependencies {
 	developmentOnly('org.springframework.boot:spring-boot-devtools')
 }
 
-jar {
-  from('../frontend/build') {
-    into 'static'
-  }
-}
-
-jar.dependsOn(':frontend:build')
+//jar {
+//  from('../frontend/build') {
+//    into 'static'
+//  }
+//}
+//
+//jar.dependsOn(':frontend:build')
