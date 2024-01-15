@@ -7,9 +7,9 @@ import Routes from './app/router/Routes';
 import Sidebar from "./app/Sidebar";
 import {sidebarClose, sidebarOpen} from "./app/store/reducers/app/layout";
 import NotificationBar from "./app/NotificationBar";
-import {withRouter} from "react-router-dom";
 import LoginDialog from "./app/ui/login/LoginDialog";
 import {authenticate, currentUserLoad, currentUserLogout} from "./app/store/reducers/app/auth";
+import { useNavigate } from 'react-router-dom';
 
 class Application extends Component {
     state = {
@@ -18,7 +18,7 @@ class Application extends Component {
     };
 
     handleHeaderTitleClick() {
-        this.props.history.push('/');
+        this.navigate('/');
     }
 
     handleSidebarOpen() {
@@ -46,6 +46,7 @@ class Application extends Component {
     }
 
     componentDidMount() {
+        this.navigate = useNavigate();
         this.props.currentUserLoad();
     }
 
@@ -77,8 +78,6 @@ class Application extends Component {
 }
 
 Application.propTypes = {
-    history: PropTypes.object.isRequired,
-
     currentUser: PropTypes.object.isRequired,
     currentUserLoaded: PropTypes.bool.isRequired,
     currentUserLoad: PropTypes.func.isRequired,
@@ -121,4 +120,4 @@ const mapActions = (dispatch) => ({
     logout: () => dispatch(currentUserLogout())
 });
 
-export default withRouter(connect(mapState, mapActions)(Application));
+export default connect(mapState, mapActions)(Application);

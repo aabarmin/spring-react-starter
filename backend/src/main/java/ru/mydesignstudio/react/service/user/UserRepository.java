@@ -1,16 +1,15 @@
 package ru.mydesignstudio.react.service.user;
 
-import java.util.Collection;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
 import ru.mydesignstudio.react.domain.User;
 
+import java.util.Collection;
+
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends CrudRepository<User, Integer> {
 	/**
 	 * Find page of users by pageable object and with draft status.
 	 * @param pageInfo pageable info
